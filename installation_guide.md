@@ -32,30 +32,15 @@ sudo systemctl start docker
 # Install Docker Compose
 sudo apt install docker-compose -y
 
-#Verify installation
-```bash
+# Verify installation
 docker --version
 docker-compose --version
 
 
 
-## 🔹 3. Install Docker & Docker Compose  
 
-Run the following commands:  
 
-```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
 
-# Install Docker
-curl -fsSL https://get.docker.com | sh
-
-# Enable Docker service
-sudo systemctl enable docker
-sudo systemctl start docker
-
-# Install Docker Compose
-sudo apt install docker-compose -y
 
 
 
