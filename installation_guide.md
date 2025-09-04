@@ -36,6 +36,15 @@ sudo apt install docker-compose -y
 docker --version
 docker-compose --version
 
+---
+
+## 🔹 3. Clone the Repository  
+
+Clone this project from GitHub and enter the directory:  
+
+```bash
+git clone https://github.com/simpal007/Honeypot-ThreatIntel-System.git
+cd Honeypot-ThreatIntel-System
 
 
 
