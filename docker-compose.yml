@@ -1,4 +1,5 @@
 version: "3"
+
 services:
   loki:
     image: grafana/loki:2.9.0
@@ -7,6 +8,8 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - ./loki-config.yaml:/etc/loki/local-config.yaml
+    networks:
+      - honeynet
 
   grafana:
     image: grafana/grafana:latest
@@ -14,5 +17,37 @@ services:
       - "3000:3000"
     volumes:
       - grafana-data:/var/lib/grafana
+    depends_on:
+      - loki
+    networks:
+      - honeynet
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    volumes:
+      - ./promtail-config.yaml:/etc/promtail/config.yaml
+      - /var/log:/var/log
+      - ./cowrie/log:/var/log/cowrie   # mount cowrie logs
+    command: -config.file=/etc/promtail/config.yaml
+    depends_on:
+      - loki
+    networks:
+      - honeynet
+
+  cowrie:
+    image: cowrie/cowrie:latest
+    container_name: cowrie
+    ports:
+      - "22:2222"       # SSH honeypot
+      - "23:2223"       # Telnet honeypot
+    volumes:
+      - ./cowrie/log:/cowrie/var/log/cowrie
+    networks:
+      - honeynet
+
 volumes:
   grafana-data:
+
+networks:
+  honeynet:
+    driver: bridge
