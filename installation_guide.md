@@ -377,10 +377,55 @@ To restart services:
 ```yaml
 docker-compose restart
 ```
+## 12. Telegram Alerting (Optional but Recommended)
 
+This project supports Telegram alerts for real-time notifications.
 
+1. Create a Telegram Bot
 
+- Open Telegram → search for @BotFather
 
+- Run /newbot and follow instructions
+
+Copy the Bot Token
+
+2. Get Chat ID
+
+- Add your bot to a group (or use direct chat)
+
+- Send any message
+
+Open:
+
+```yaml
+https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
+```
+Look for "chat":{"id": <your_chat_id>}
+
+3. Configure .env file
+
+```yaml
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+TELEGRAM_CHAT_ID=your_chat_id_here
+```
+
+4. Run Notification Script
+
+- This project includes a script (alerts/telegram_alert.py)
+
+- It reads logs, enriches with AbuseIPDB/OTX, and sends alerts to Telegram
+
+Run it with:
+
+```yaml
+python3 alerts/telegram_alert.py
+```
+
+5. Expected Output
+
+- When Cowrie logs a new attacker IP → script checks it against AbuseIPDB & OTX
+
+- A formatted alert appears in your Telegram group
 
 
 
