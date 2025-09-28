@@ -48,13 +48,26 @@ git clone https://github.com/simpal007/Honeypot-ThreatIntel-System.git
 cd Honeypot-ThreatIntel-System
 
 ```
+## 🔹 4. Configure Environment Variables
 
-## 🔹 4. Cowrie Honeypot Setup  
+Create a .env file in the project root for API keys:
+
+```yaml
+ABUSEIPDB_API_KEY=your_abuseipdb_key
+OTX_API_KEY=your_otx_key
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_CHAT_ID=your_chat_id
+```
+This file is used by integration scripts for threat enrichment and alerting.
+
+---
+
+## 🔹 5. Cowrie Honeypot Setup  
 
 Cowrie is an SSH and Telnet honeypot designed to log brute force attacks and capture attacker activity.  
 In **HoneySentinel**, Cowrie acts as the primary honeypot whose logs are forwarded to **Loki** via **Promtail**.  
 
----
+
 
 ### ➡️ Add Cowrie to Docker Compose  
 
@@ -122,7 +135,7 @@ cowrie/var/log/cowrie/cowrie.log
 ```
 ---
 
-## 🔹 5. Loki Setup (Log Aggregator)
+## 🔹 6. Loki Setup (Log Aggregator)
 
 - Ensure you have docker-compose.yml and loki-config.yaml in the project folder.
 - Start Loki with Docker Compose:
@@ -144,7 +157,7 @@ http://<your-server-ip>:3100/metrics
 
 ---
 
-## 🔹 6. Grafana Setup (Dashboard & Visualization)  
+## 🔹 7. Grafana Setup (Dashboard & Visualization)  
 
 Grafana allows you to visualize logs collected by **Promtail** and stored in **Loki**.  
 
@@ -191,7 +204,7 @@ Password: admin (you will be prompted to change it on first login)
 
 ---
 
-## 🔹 7. Promtail Setup (Log Collector)
+## 🔹 8. Promtail Setup (Log Collector)
 
 Promtail is an agent that collects logs from the Honeypot (Cowrie) and forwards them to **Loki** for storage and indexing.  
 
@@ -267,7 +280,7 @@ Run a query such as:
 ```
 ---
 
-## 🔹 8. Grafana – Loki Integration  
+## 🔹 9. Grafana – Loki Integration  
 
 Grafana is used to visualize and explore the logs stored in Loki.  
 By connecting Loki as a **data source** in Grafana, you can create dashboards, run queries, and monitor attacker activities.  
@@ -332,6 +345,39 @@ Example queries:
 ```yaml
 {job="cowrie"} | json | line_format "{{.src_ip}}"
 ```
+## 🔹 10. Verification
+
+After setup, verify everything works:
+
+Test Cowrie:
+
+```yaml
+ssh root@<honeypot-ip> -p 2222
+```
+
+Cowrie should log this attempt.
+
+Check Logs in Grafana:
+Open Grafana → Explore → select Loki as data source → run query:
+
+```yaml
+{job="cowrie"}
+```
+You should see attacker logs appear.
+
+## 🔹 11. Managing Containers
+
+To stop services:
+```yaml
+docker-compose down
+```
+
+To restart services:
+
+```yaml
+docker-compose restart
+```
+
 
 
 
